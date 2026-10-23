@@ -1,0 +1,95 @@
+/* src/styles/print.css - Bilingual Formal Accounting Style */
+
+@media print {
+  /* Page Setup & Margins */
+  @page {
+    size: A4; margin: 20mm;
+  }
+
+  /* Global Print Styles */
+  body {
+    counter-reset: page;
+    background: white !important;
+    color: black !important;
+    /* Use a font stack that supports both Latin (mono) and Arabic (Tahoma/Arial) */
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", "Tahoma", "Arial", sans-serif !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-size: 10pt;
+    line-height: 1.6;
+    direction: ltr; /* Default LTR, but labels will contain RTL text */
+  }
+
+  /* Structural Resets */
+  html, body, #root, main, div {
+    height: auto !important; min-height: 0 !important;
+    overflow: visible !important; display: block !important;
+    box-shadow: none !important; border: none !important;
+    background-color: white !important;
+  }
+
+  /* Hide UI elements */
+  .sidebar, nav, aside, header, .print-hidden, [role="navigation"], button:not(.print-include) {
+    display: none !important;
+  }
+
+  /* Page Break Control */
+  .page-break {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* Minimalist Tables */
+  table {
+    page-break-inside: auto;
+    width: 100%;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    border-bottom: 0.5px solid #ccc;
+    text-align: left;
+    color: black !important;
+  }
+
+  /* Support for Right-Aligned Arabic Columns if needed */
+  .rtl-cell {
+    text-align: right;
+    direction: rtl;
+  }
+
+  th {
+    border-bottom: 1px solid black;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 8pt;
+    background-color: #f9fafb !important;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  /* Page Numbering */
+  .pageNum:after {
+    counter-increment: page;
+    content: "Page " counter(page);
+  }
+
+  /* Remove all colors and effects */
+  * {
+    background-color: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+}
