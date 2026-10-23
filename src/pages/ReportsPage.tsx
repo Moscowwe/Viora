@@ -274,18 +274,18 @@ const ReportsPage = () => {
                     dateRange={isLiveSelected ? `Live Data: ${currentMonthStart} to ${currentMonthEnd}` : `Locked Archive`}
                 >
                     {/* KPI CARDS */}
-                    <div className="grid grid-cols-3 gap-6 mb-12">
-                        <div className="border border-slate-200 p-6 rounded-2xl bg-slate-50">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+                        <div className="border border-slate-200 p-4 sm:p-6 rounded-2xl bg-slate-50">
                             <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Total Revenue (إيرادات)</div>
-                            <div className="text-2xl font-black text-slate-900">{formatCurrency(selectedReport.report_data.kpis.totalRevenue)}</div>
+                            <div className="text-xl sm:text-2xl font-black text-slate-900">{formatCurrency(selectedReport.report_data.kpis.totalRevenue)}</div>
                         </div>
-                        <div className="border border-slate-200 p-6 rounded-2xl bg-slate-50">
+                        <div className="border border-slate-200 p-4 sm:p-6 rounded-2xl bg-slate-50">
                             <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Total Expenses (مصروفات)</div>
-                            <div className="text-2xl font-black text-red-700">-{formatCurrency(selectedReport.report_data.kpis.totalExpenses)}</div>
+                            <div className="text-xl sm:text-2xl font-black text-red-700">-{formatCurrency(selectedReport.report_data.kpis.totalExpenses)}</div>
                         </div>
-                        <div className="border-2 border-slate-900 p-6 rounded-2xl bg-slate-900 text-white">
+                        <div className="border-2 border-slate-900 p-4 sm:p-6 rounded-2xl bg-slate-900 text-white">
                             <div className="text-xs font-black text-slate-300 uppercase tracking-widest mb-2">Net Profit (صافي الربح)</div>
-                            <div className={`text-3xl font-black ${selectedReport.report_data.kpis.netProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                            <div className={`text-2xl sm:text-3xl font-black ${selectedReport.report_data.kpis.netProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                                 {formatCurrency(selectedReport.report_data.kpis.netProfit)}
                             </div>
                         </div>
@@ -294,7 +294,7 @@ const ReportsPage = () => {
                     {/* EXPENSE BREAKDOWN */}
                     <div className="mb-10">
                         <h4 className="text-sm font-black uppercase tracking-widest text-slate-900 border-b-2 border-slate-200 pb-2 mb-4">Expenses Breakdown (تفصيل المصروفات)</h4>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                             <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
                                 <span className="text-xs font-bold text-slate-600 uppercase">Salaries (رواتب)</span>
                                 <span className="font-black text-slate-900">{formatCurrency(selectedReport.report_data.kpis.totalSalaries)}</span>
@@ -313,51 +313,55 @@ const ReportsPage = () => {
                     {/* INCOME TABLE */}
                     <div className="mb-10 page-break-inside-avoid">
                         <h4 className="text-sm font-black uppercase tracking-widest text-slate-900 border-b-2 border-slate-200 pb-2 mb-4">Income Entries (حركة الإيرادات)</h4>
-                        <table className="w-full text-left border-collapse text-sm">
-                            <thead>
-                                <tr className="text-xs text-slate-500 uppercase tracking-widest">
-                                    <th className="py-2 border-b border-slate-200">Date</th>
-                                    <th className="py-2 border-b border-slate-200">Category</th>
-                                    <th className="py-2 border-b border-slate-200">Description</th>
-                                    <th className="py-2 border-b border-slate-200 text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {incomeTxs.length > 0 ? incomeTxs.map((tx, i) => (
-                                    <tr key={i} className="border-b border-slate-100">
-                                        <td className="py-3 text-slate-500 font-mono text-xs">{tx.date}</td>
-                                        <td className="py-3 font-bold text-slate-700">{tx.category || 'General'}</td>
-                                        <td className="py-3 text-slate-600">{tx.description}</td>
-                                        <td className="py-3 text-right font-black text-emerald-600">+{formatCurrency(tx.amount)}</td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse text-sm min-w-[500px]">
+                                <thead>
+                                    <tr className="text-xs text-slate-500 uppercase tracking-widest">
+                                        <th className="py-2 border-b border-slate-200">Date</th>
+                                        <th className="py-2 border-b border-slate-200">Category</th>
+                                        <th className="py-2 border-b border-slate-200">Description</th>
+                                        <th className="py-2 border-b border-slate-200 text-right">Amount</th>
                                     </tr>
-                                )) : <tr><td colSpan={4} className="py-8 text-center text-slate-400 italic text-xs uppercase tracking-widest">No income recorded this month</td></tr>}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {incomeTxs.length > 0 ? incomeTxs.map((tx, i) => (
+                                        <tr key={i} className="border-b border-slate-100">
+                                            <td className="py-3 text-slate-500 font-mono text-xs">{tx.date}</td>
+                                            <td className="py-3 font-bold text-slate-700">{tx.category || 'General'}</td>
+                                            <td className="py-3 text-slate-600">{tx.description}</td>
+                                            <td className="py-3 text-right font-black text-emerald-600">+{formatCurrency(tx.amount)}</td>
+                                        </tr>
+                                    )) : <tr><td colSpan={4} className="py-8 text-center text-slate-400 italic text-xs uppercase tracking-widest">No income recorded this month</td></tr>}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     {/* EXPENSE TABLE */}
                     <div className="page-break-inside-avoid">
                         <h4 className="text-sm font-black uppercase tracking-widest text-slate-900 border-b-2 border-slate-200 pb-2 mb-4">Expense Entries (حركة المصروفات)</h4>
-                        <table className="w-full text-left border-collapse text-sm">
-                            <thead>
-                                <tr className="text-xs text-slate-500 uppercase tracking-widest">
-                                    <th className="py-2 border-b border-slate-200">Date</th>
-                                    <th className="py-2 border-b border-slate-200">Category</th>
-                                    <th className="py-2 border-b border-slate-200">Description</th>
-                                    <th className="py-2 border-b border-slate-200 text-right">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {expenseTxs.length > 0 ? expenseTxs.map((tx, i) => (
-                                    <tr key={i} className="border-b border-slate-100">
-                                        <td className="py-3 text-slate-500 font-mono text-xs">{tx.date}</td>
-                                        <td className="py-3 font-bold text-slate-700">{tx.category}</td>
-                                        <td className="py-3 text-slate-600">{tx.description}</td>
-                                        <td className="py-3 text-right font-black text-rose-600">-{formatCurrency(tx.amount)}</td>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse text-sm min-w-[500px]">
+                                <thead>
+                                    <tr className="text-xs text-slate-500 uppercase tracking-widest">
+                                        <th className="py-2 border-b border-slate-200">Date</th>
+                                        <th className="py-2 border-b border-slate-200">Category</th>
+                                        <th className="py-2 border-b border-slate-200">Description</th>
+                                        <th className="py-2 border-b border-slate-200 text-right">Amount</th>
                                     </tr>
-                                )) : <tr><td colSpan={4} className="py-8 text-center text-slate-400 italic text-xs uppercase tracking-widest">No expenses recorded this month</td></tr>}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {expenseTxs.length > 0 ? expenseTxs.map((tx, i) => (
+                                        <tr key={i} className="border-b border-slate-100">
+                                            <td className="py-3 text-slate-500 font-mono text-xs">{tx.date}</td>
+                                            <td className="py-3 font-bold text-slate-700">{tx.category}</td>
+                                            <td className="py-3 text-slate-600">{tx.description}</td>
+                                            <td className="py-3 text-right font-black text-rose-600">-{formatCurrency(tx.amount)}</td>
+                                        </tr>
+                                    )) : <tr><td colSpan={4} className="py-8 text-center text-slate-400 italic text-xs uppercase tracking-widest">No expenses recorded this month</td></tr>}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </MinimalistReportPage>
               </div>

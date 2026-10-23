@@ -6,6 +6,8 @@ import { Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { EASE } from "@/lib/motion";
 
+import ProfileDropdown from "./ProfileDropdown";
+
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -39,15 +41,27 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex min-h-screen bg-background overflow-hidden flex-col md:flex-row relative">
       
       {/* Mobile Top Bar */}
-      <header className="md:hidden flex items-center gap-3 bg-card/80 backdrop-blur-md h-14 px-4 border-b border-border/80 z-40 sticky top-0 shadow-sm">
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Open navigation"
-          className="press focus-ring text-foreground p-2 rounded-xl hover:bg-surface-container"
-        >
-          <Menu size={20} strokeWidth={2} />
-        </button>
-        <span className="font-headline font-bold text-base text-foreground truncate">{user.display_name || "Viora"}</span>
+      <header className="md:hidden flex items-center justify-between bg-card/85 backdrop-blur-md h-14 px-4 border-b border-border/80 z-40 sticky top-0 shadow-sm">
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open navigation"
+            className="press focus-ring text-foreground p-2 rounded-xl hover:bg-surface-container cursor-pointer"
+          >
+            <Menu size={20} strokeWidth={2} />
+          </button>
+          
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-black border border-primary/50 p-0.5 overflow-hidden flex items-center justify-center shadow-sm">
+              <img src="/logo-light.png" alt="Viora" className="w-full h-full object-cover rounded-full" />
+            </div>
+            <span className="font-headline font-bold text-sm text-foreground truncate">
+              {user.display_name || "Viora"}
+            </span>
+          </div>
+        </div>
+
+        <ProfileDropdown />
       </header>
 
       {/* Sidebar with mobile state passed */}

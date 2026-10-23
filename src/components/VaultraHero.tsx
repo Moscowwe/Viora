@@ -108,10 +108,18 @@ export const VaultraHero: React.FC = () => {
     }
   };
 
-  const handleDemoFill = () => {
-    setEmail("mina@prodigy.ro");
-    setPassword("R0nald0r");
-    toast.info(isRtl ? "تم إدخال بيانات الحساب التجريبي!" : "Demo credentials filled!");
+  const handleDirectDemoLogin = async () => {
+    setLoading(true);
+    try {
+      await signIn("mina@prodigy.ro", "R0nald0r");
+      toast.success(isRtl ? "مرحباً بك في النسخة التجريبية لفيورا!" : "Entering Viora Demo Workspace...");
+      navigate("/admin");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : (isRtl ? "فشل الدخول التجريبي" : "Demo login failed");
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleLanguage = () => {
@@ -182,7 +190,7 @@ export const VaultraHero: React.FC = () => {
       ];
 
   return (
-    <div className="relative w-full h-screen max-h-screen overflow-hidden bg-[#030308] text-white select-none font-sans flex flex-col justify-between">
+    <div className="relative w-full min-h-[100dvh] md:h-screen md:max-h-screen overflow-y-auto md:overflow-hidden bg-[#030308] text-white select-none font-sans flex flex-col justify-between py-2 md:py-0">
       {/* 1. Cinematic Rotating Globe Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex items-end justify-center">
         {/* Still Plate fallback */}
@@ -240,13 +248,13 @@ export const VaultraHero: React.FC = () => {
       </div>
 
       {/* 3. Top Navigation Bar */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-4 sm:py-5 flex items-center justify-between shrink-0">
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between shrink-0">
         {/* Brand Mark with Smooth Micro-Interaction */}
         <div
           onClick={() => setIsLoginActive(false)}
-          className="flex items-center gap-3 cursor-pointer group"
+          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group"
         >
-          <div className="relative w-10 h-10 rounded-full bg-black/85 border border-primary/50 p-1 flex items-center justify-center overflow-hidden shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/85 border border-primary/50 p-1 flex items-center justify-center overflow-hidden shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform">
             <img
               src="/logo-light.png"
               alt="Viora Logo"
@@ -257,17 +265,17 @@ export const VaultraHero: React.FC = () => {
             />
           </div>
           <div>
-            <span className="font-headline font-black tracking-[0.22em] text-lg text-white">
+            <span className="font-headline font-black tracking-[0.22em] text-base sm:text-lg text-white">
               VIORA
             </span>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/12 backdrop-blur-xl text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer"
+            className="flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/12 backdrop-blur-xl text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer"
           >
             <Globe size={13} className="text-amber-400" />
             <span>{isRtl ? "English" : "العربية"}</span>
@@ -278,7 +286,7 @@ export const VaultraHero: React.FC = () => {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => setIsLoginActive(true)}
-              className="px-5 py-2 rounded-full bg-gradient-to-r from-primary via-[#9e002b] to-[#600018] text-white font-bold text-xs hover:shadow-[0_0_20px_rgba(158,0,43,0.5)] transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-primary/30"
+              className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-primary via-[#9e002b] to-[#600018] text-white font-bold text-xs hover:shadow-[0_0_20px_rgba(158,0,43,0.5)] transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-primary/30"
             >
               <span>{isRtl ? "تسجيل الدخول" : "Sign In"}</span>
               <ArrowRight size={13} className={isRtl ? "rotate-180" : ""} />
@@ -286,7 +294,7 @@ export const VaultraHero: React.FC = () => {
           ) : (
             <button
               onClick={() => setIsLoginActive(false)}
-              className="px-4 py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/15 text-xs font-semibold text-slate-200 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+              className="px-3.5 sm:px-4 py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/15 text-xs font-semibold text-slate-200 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
             >
               <ArrowLeft size={13} className={isRtl ? "rotate-180" : ""} />
               <span>{isRtl ? "الرئيسية" : "Overview"}</span>
@@ -296,7 +304,7 @@ export const VaultraHero: React.FC = () => {
       </header>
 
       {/* 4. Center Stage (Single Page, Smooth Cross-Fade between Presentation & Login) */}
-      <div className="relative z-20 w-full max-w-5xl mx-auto px-6 text-center flex flex-col items-center justify-center my-auto flex-1 min-h-0">
+      <div className="relative z-20 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center my-auto flex-1 min-h-0 py-4 md:py-0">
         <AnimatePresence mode="wait">
           {!isLoginActive ? (
             /* ======================================================== */
@@ -315,10 +323,10 @@ export const VaultraHero: React.FC = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/12 backdrop-blur-xl shadow-lg mb-4"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/12 backdrop-blur-xl shadow-lg mb-3 sm:mb-4"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] sm:text-xs font-semibold text-slate-200 tracking-wide">
+                <span className="text-[10px] sm:text-xs font-semibold text-slate-200 tracking-wide">
                   {isRtl
                     ? "نظام الحضانة الذكي المتكامل للجيل القادم"
                     : "Next-Gen Preschool & Nursery Management Cloud"}
@@ -330,7 +338,7 @@ export const VaultraHero: React.FC = () => {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="text-3xl sm:text-5xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] font-headline max-w-3xl"
+                className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] font-headline max-w-3xl"
               >
                 {isRtl ? (
                   <>
@@ -338,7 +346,7 @@ export const VaultraHero: React.FC = () => {
                       إدارة حضانتك الذكية
                     </span>
                     <br />
-                    <span className="text-white font-light text-2xl sm:text-4xl md:text-5xl mt-1 block">
+                    <span className="text-white font-light text-xl sm:text-3xl md:text-5xl mt-1 block">
                       بكل سلاسة وانسيابية
                     </span>
                   </>
@@ -348,7 +356,7 @@ export const VaultraHero: React.FC = () => {
                       Elevating Early Education
                     </span>
                     <br />
-                    <span className="text-white font-light text-2xl sm:text-4xl md:text-5xl mt-1 block">
+                    <span className="text-white font-light text-xl sm:text-3xl md:text-5xl mt-1 block">
                       with Intelligent Management
                     </span>
                   </>
@@ -360,7 +368,7 @@ export const VaultraHero: React.FC = () => {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="mt-3 text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl leading-relaxed font-normal"
+                className="mt-2.5 sm:mt-3 text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl leading-relaxed font-normal px-2"
               >
                 {isRtl
                   ? "منصة متطورة توحد شؤون الأطفال والحضور، أتمتة الرسوم والمصروفات المالية، رواتب المعلمين والموظفين، وبرامج المعسكرات الصيفية في بيئة سحابية واحدة آمنة."
@@ -372,7 +380,7 @@ export const VaultraHero: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, delay: 0.3 }}
-                className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 w-full max-w-4xl mt-5 sm:mt-6"
+                className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 w-full max-w-4xl mt-4 sm:mt-6"
                 dir={isRtl ? "rtl" : "ltr"}
               >
                 {features.map((item, idx) => {
@@ -409,27 +417,27 @@ export const VaultraHero: React.FC = () => {
                       key={idx}
                       whileHover={{ y: -3, scale: 1.02 }}
                       transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                      className={`relative group rounded-2xl p-3 sm:p-3.5 bg-black/40 hover:bg-black/60 border border-white/[0.08] backdrop-blur-xl transition-all duration-300 flex flex-col justify-between text-start overflow-hidden ${accentColors.glow}`}
+                      className={`relative group rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 bg-black/45 hover:bg-black/65 border border-white/[0.08] backdrop-blur-xl transition-all duration-300 flex flex-col justify-between text-start overflow-hidden ${accentColors.glow}`}
                     >
                       {/* Subtle top shimmer highlight */}
                       <div className={`absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r ${accentColors.topLine} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
                       {/* Top row: Icon + Micro Status Tag */}
-                      <div className="flex items-center justify-between mb-2">
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center border shadow-sm ${accentColors.iconBox}`}>
-                          <Icon size={16} />
+                      <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                        <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center border shadow-sm ${accentColors.iconBox}`}>
+                          <Icon size={15} />
                         </div>
-                        <span className={`text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${accentColors.tag}`}>
+                        <span className={`text-[8px] sm:text-[9px] font-mono uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full border ${accentColors.tag}`}>
                           {item.tag}
                         </span>
                       </div>
 
                       {/* Title & Short Description */}
                       <div>
-                        <h3 className="font-headline font-bold text-xs sm:text-[13px] text-white tracking-tight mb-1 group-hover:text-slate-100">
+                        <h3 className="font-headline font-bold text-[11px] sm:text-[13px] text-white tracking-tight mb-0.5 sm:mb-1 group-hover:text-slate-100">
                           {item.title}
                         </h3>
-                        <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                        <p className="text-[10px] sm:text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
                           {item.desc}
                         </p>
                       </div>
@@ -443,13 +451,13 @@ export const VaultraHero: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.45 }}
-                className="mt-6 sm:mt-7 flex flex-wrap items-center justify-center gap-3.5"
+                className="mt-5 sm:mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto"
               >
                 <motion.button
                   whileHover={{ scale: 1.04, y: -2 }}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setIsLoginActive(true)}
-                  className="px-8 py-3 rounded-full bg-gradient-to-r from-primary via-[#9e002b] to-[#600018] text-white font-bold text-xs sm:text-sm hover:shadow-[0_0_35px_rgba(158,0,43,0.65)] transition-all shadow-xl shadow-primary/35 flex items-center gap-2.5 cursor-pointer border border-white/20"
+                  className="w-full sm:w-auto px-7 py-3 rounded-full bg-gradient-to-r from-primary via-[#9e002b] to-[#600018] text-white font-bold text-xs sm:text-sm hover:shadow-[0_0_35px_rgba(158,0,43,0.65)] transition-all shadow-xl shadow-primary/35 flex items-center justify-center gap-2 cursor-pointer border border-white/20"
                 >
                   <span>{isRtl ? "دخول المنصة وتسجيل الدخول" : "Access Workspace Portal"}</span>
                   <ArrowRight size={15} strokeWidth={2.5} className={isRtl ? "rotate-180" : ""} />
@@ -458,14 +466,16 @@ export const VaultraHero: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  onClick={() => {
-                    handleDemoFill();
-                    setIsLoginActive(true);
-                  }}
-                  className="px-5 py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/20 text-white font-semibold text-xs sm:text-sm backdrop-blur-xl transition-all cursor-pointer flex items-center gap-2"
+                  onClick={handleDirectDemoLogin}
+                  disabled={loading}
+                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/20 text-white font-semibold text-xs sm:text-sm backdrop-blur-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <Sparkles size={14} className="text-amber-400 animate-pulse" />
-                  <span>{isRtl ? "تجربة سريعة (Demo)" : "Try Admin Demo"}</span>
+                  {loading ? (
+                    <Loader2 size={14} className="animate-spin text-amber-400" />
+                  ) : (
+                    <Sparkles size={14} className="text-amber-400 animate-pulse" />
+                  )}
+                  <span>{isRtl ? "دخول تجريبي فوري (Demo)" : "Instant Demo Access"}</span>
                 </motion.button>
               </motion.div>
             </motion.div>
@@ -483,7 +493,7 @@ export const VaultraHero: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.93, y: -15 }}
               transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-[420px] rounded-3xl bg-[#070912]/90 border border-white/[0.14] p-6 sm:p-7 shadow-[0_30px_90px_rgba(0,0,0,0.9),0_0_60px_rgba(158,0,43,0.3)] backdrop-blur-2xl text-white overflow-hidden text-start"
+              className="relative w-full max-w-[420px] rounded-2xl sm:rounded-3xl bg-[#070912]/95 border border-white/[0.14] p-5 sm:p-7 shadow-[0_30px_90px_rgba(0,0,0,0.9),0_0_60px_rgba(158,0,43,0.3)] backdrop-blur-2xl text-white overflow-hidden text-start mx-auto my-auto"
             >
               {/* Dynamic Mouse Spotlight */}
               {isCardHovered && (
@@ -519,15 +529,15 @@ export const VaultraHero: React.FC = () => {
                 </button>
               </div>
 
-              {/* Brand Crest Header: Radiant Cyber Emblem */}
+              {/* Brand Crest Header: Radiant Perfectly Circular Cyber Emblem */}
               <div className="flex flex-col items-center text-center mb-4 relative z-10">
-                <div className="relative group mb-2">
-                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary via-rose-500 to-amber-500 opacity-70 blur-md group-hover:opacity-100 animate-pulse transition duration-500" />
-                  <div className="relative w-14 h-14 rounded-full bg-[#05060b] border border-white/20 p-2 flex items-center justify-center shadow-xl">
+                <div className="relative group mb-2.5">
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary via-rose-500 to-amber-500 opacity-75 blur-md group-hover:opacity-100 animate-pulse transition duration-500" />
+                  <div className="relative w-16 h-16 rounded-full bg-black border border-primary/50 p-1 flex items-center justify-center overflow-hidden shadow-[0_0_25px_rgba(184,0,51,0.6)]">
                     <img
                       src="/logo-light.png"
                       alt="Viora Logo"
-                      className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(225,29,72,0.6)]"
+                      className="w-full h-full object-cover rounded-full scale-110"
                       onError={(e) => {
                         e.currentTarget.src = "/favicon.png";
                       }}
@@ -564,7 +574,7 @@ export const VaultraHero: React.FC = () => {
                       className={`w-full bg-white/[0.04] hover:bg-white/[0.07] focus:bg-white/[0.08] border border-white/12 focus:border-rose-500/80 rounded-xl py-2.5 text-xs sm:text-sm text-white focus:ring-2 focus:ring-rose-500/20 transition-all outline-none placeholder:text-slate-500 ${
                         isRtl ? "pr-9 pl-3 text-right" : "pl-9 pr-3 text-left"
                       }`}
-                      placeholder="mina@prodigy.ro"
+                      placeholder={isRtl ? "اسم المستخدم أو البريد" : "Username or email"}
                       type="text"
                       autoComplete="username"
                       value={email}
@@ -638,11 +648,16 @@ export const VaultraHero: React.FC = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="button"
-                    onClick={handleDemoFill}
-                    className="w-full bg-amber-400/[0.06] hover:bg-amber-400/[0.12] border border-amber-400/20 hover:border-amber-400/40 text-amber-200 hover:text-amber-100 font-semibold text-xs py-2 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                    onClick={handleDirectDemoLogin}
+                    disabled={loading}
+                    className="w-full bg-amber-400/[0.08] hover:bg-amber-400/[0.15] border border-amber-400/25 hover:border-amber-400/50 text-amber-200 hover:text-amber-100 font-semibold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                   >
-                    <Sparkles size={13} className="text-amber-400 animate-pulse" />
-                    <span>{isRtl ? "تعبئة بيانات الحساب التجريبي (Demo)" : "Fill Demo Credentials"}</span>
+                    {loading ? (
+                      <Loader2 size={13} className="animate-spin text-amber-400" />
+                    ) : (
+                      <Sparkles size={13} className="text-amber-400 animate-pulse" />
+                    )}
+                    <span>{isRtl ? "دخول فوري بحساب تجريبي (Demo)" : "Instant Demo Access (1-Click)"}</span>
                   </motion.button>
                 </div>
               </form>
@@ -663,12 +678,12 @@ export const VaultraHero: React.FC = () => {
       </div>
 
       {/* 5. Minimalist Bottom Footer */}
-      <footer className="relative z-20 w-full max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between text-[11px] text-slate-400 shrink-0 border-t border-white/[0.06]">
+      <footer className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 shrink-0 border-t border-white/[0.06]">
         <span className="flex items-center gap-1.5">
           <ShieldCheck size={13} className="text-emerald-400" />
           <span>{isRtl ? "منصة سحابية آمنة 100%" : "100% Encrypted & Safe Platform"}</span>
         </span>
-        <span className="font-mono text-[10px] tracking-widest text-slate-300 uppercase">
+        <span className="font-mono text-[9px] sm:text-[10px] tracking-widest text-slate-300 uppercase">
           VIORA SAAS v2.1
         </span>
       </footer>

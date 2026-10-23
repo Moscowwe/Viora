@@ -20,6 +20,7 @@ import {
   Sun,
   Moon,
   Sparkles,
+  X,
 } from "lucide-react";
 
 const navItems = [
@@ -129,15 +130,25 @@ const AdminSidebar = ({ isOpen = false, onClose = () => {} }: { isOpen?: boolean
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: isRtl ? 12 : -12 }}
                   transition={{ duration: 0.2 }}
-                  className="min-w-0 flex-1"
+                  className="min-w-0 flex-1 flex items-center justify-between"
                 >
-                  <p className="text-sm font-extrabold text-foreground truncate leading-tight font-headline flex items-center gap-1.5">
-                    {workspaceName}
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  </p>
-                  <p className="text-[11px] text-muted-foreground truncate leading-tight mt-0.5 font-medium">
-                    Viora · {isCamp ? (isRtl ? "المعسكر الصيفي" : "Summer camp") : (isRtl ? "الحضانة" : "Nursery")}
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-extrabold text-foreground truncate leading-tight font-headline flex items-center gap-1.5">
+                      {workspaceName}
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    </p>
+                    <p className="text-[11px] text-muted-foreground truncate leading-tight mt-0.5 font-medium">
+                      Viora · {isCamp ? (isRtl ? "المعسكر الصيفي" : "Summer camp") : (isRtl ? "الحضانة" : "Nursery")}
+                    </p>
+                  </div>
+                  {/* Explicit mobile close button */}
+                  <button
+                    onClick={onClose}
+                    className="md:hidden p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                    aria-label="Close sidebar"
+                  >
+                    <X size={18} />
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>
